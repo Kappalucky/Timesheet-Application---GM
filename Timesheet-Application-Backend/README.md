@@ -6,6 +6,8 @@ This folder contains the Django built backend for the Timesheet application
 
 This is the general starting point as of right now. More detailed documentation to be written soon.
 
+Typically i remove all secret keys and place important information within ENV files but for this application i left everything in.
+
 #### Prerequisites
 
 - [Python 3.0+](https://www.python.org/)
