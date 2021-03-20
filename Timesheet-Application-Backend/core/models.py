@@ -1,3 +1,5 @@
+"""Core Models: Contains database classes and functions"""
+
 # Python imports
 from decimal import *
 

@@ -1,6 +1,11 @@
 """Core Forms: Forms for Core functionality object creation"""
 
-from django.forms import ModelForm, fields
+# Python imports
+# Django imports
+from django.forms import ModelForm
+
+# 3rd party apps
+# Local app imports
 from .models import Timesheet
 
 
