@@ -1,7 +1,6 @@
 # Timesheet-Application-GM
 
-GM Interview Application
-Welcome to the **Timesheet Application** codebase. I ([@kappalucky](https://github.com/kappalucky)) is the original creator, you are more than welcomed to make use of the codebase, but be sure to follow the licensing details. This program is based on the requirements given by Giant Machines.
+Welcome to the **Timesheet Application** codebase. I ([@kappalucky](https://github.com/kappalucky)) am the original creator. You are more than welcomed to make use of the codebase, but be sure to follow the licensing details. This program is based on the requirements given by Giant Machines.
 
 ### Built with:
 
@@ -36,6 +35,6 @@ This program is free software and can be redistributed and/or modified under the
 
 If you have any questions related to anything about the project, licensing or contributions, email Shaquille.j.foster@gmail.com
 
-#### Need Help?
+## Need Help?
 
 No matter the issue or question. Simply mention (@kappalucky) in an issue and expect a response as soon as I can get back to you or shoot me an email at Shaquille.j.foster@gmail.com
