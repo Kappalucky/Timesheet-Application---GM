@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .models import Timesheet
 
 
-class TimesheetSerializer(serializers.Serializer):
+class TimesheetSerializer(serializers.ModelSerializer):
     """Serializes Timesheet data"""
 
     class Meta:
