@@ -3,25 +3,42 @@
 # Python imports
 import csv
 import re
+from datetime import datetime, date
 from typing import Dict, Callable, Optional
+from decimal import Decimal
 
 # Django imports
+from django.conf import settings
+
 # 3rd party apps
 # Local app imports
 from .models import Timesheet
 
-csv_path = 'Timesheet-Application-Backend/GM_Coding_Exercise_Sample_Data.csv'
+
+csv_path = '%s/GM_Coding_Exercise_Sample_Data.csv' % (settings.BASE_DIR)
 
 
 def import_to_database():
+    '''
+    This function will create instances of the Timesheet model using data from a csv file every time it is called.
+    It should only be called once or there will be duplicate data. Its purpose is solely to populate the database.
+    '''
+
+    # * Takes row information and display it as a dictionary per row
     reader = csv.DictReader(open(csv_path), delimiter=',')
+
+    # * The row must follow the formatting or this function will fail
     for row in reader:
-        timesheet = Timesheet(date=row['Date'],
+
+        billable = True if row['Billable?'] == 'Yes' else False
+        date = datetime.strptime(row['Date'], '%m/%d/%y').date()
+
+        timesheet = Timesheet(date=date,
                               client=row['Client'],
                               project=row['Project'],
                               project_code=row['Project Code'],
                               hours=row['Hours'],
-                              billable=row['Billable'],
+                              billable=billable,
                               first_name=row['First Name'],
                               last_name=row['Last Name'],
                               billable_rate=row['Billable Rate'],

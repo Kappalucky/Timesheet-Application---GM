@@ -25,24 +25,25 @@ from .parsers import SnakeCaseParser
 from .common import import_to_database
 
 
-class TimesheetList(generics.ListCreateAPIView):
+class TimesheetList(APIView):
     """List all timesheets or create a new timesheet"""
     queryset = Timesheet.objects.all()
     serializer_class = serializers.TimesheetSerializer
     renderer_classes = [CamelCaseRenderer]
     parser_classes = [SnakeCaseParser]
 
-    def get_queryset(self):
-        """
-        This view should return a list of timesheets. No authentication needed
-        """
-        if len(self.queryset()) is empty:
+    def get(self, request, format=None):
+        timesheets = Timesheet.objects.all()
+
+        if len(timesheets) is 0:
             import_to_database()
+            timesheets = Timesheet.objects.all()
 
-        return self.queryset()
+        serializer = serializers.TimesheetSerializer(timesheets, many=True)
+        return Response(serializer.data)
 
-    def perform_create(self, serializer):
-        serializer = self.serializer_class(data=self.request.data)
+    def post(self, request):
+        serializer = serializers.TimesheetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
