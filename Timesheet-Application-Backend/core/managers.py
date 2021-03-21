@@ -2,7 +2,7 @@
 
 # Python imports
 # Django imports
-from django.db.models import Manager, Sum, F, Value
+from django.db.models import Manager, Sum
 from django.db.models.expressions import ExpressionWrapper
 from django.db.models.fields import DecimalField
 from django.db.models.query import QuerySet
