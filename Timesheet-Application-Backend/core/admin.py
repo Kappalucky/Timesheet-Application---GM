@@ -15,7 +15,8 @@ class Timesheetadmin(admin.ModelAdmin):
 
     form = TimesheetForm
     model = Timesheet
-    list_display = ('__str__', 'project', 'project_code', 'hours', 'billable',)
+    list_display = ('__str__', 'project', 'project_code',
+                    'hours', 'billable', 'billable_rate',)
     list_filter = ('billable', 'project_code', 'date',)
     fieldsets = (
         (None, {

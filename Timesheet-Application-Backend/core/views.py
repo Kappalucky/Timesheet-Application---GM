@@ -35,6 +35,11 @@ class TimesheetList(APIView):
     def get(self, request, format=None):
         timesheets = Timesheet.objects.all()
 
+        """
+        When this function is called, it will be slow initially (in milliseconds) as it is creating all of the entries before returning the objects.
+        As this will only be called once [unless someone decides to delete the database or all the entries in said database]
+        the response will be faster (still in milliseconds) since this function will be skipped
+        """
         if len(timesheets) is 0:
             import_to_database()
             timesheets = Timesheet.objects.all()

@@ -8,6 +8,7 @@ from django.db import models
 
 # 3rd party apps
 # Local app imports
+from .managers import TimesheetManager
 
 
 class Timesheet(models.Model):
@@ -38,6 +39,9 @@ class Timesheet(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(null=True, blank=True,)
 
+    # Custom manager for timesheet manipulation
+    objects = TimesheetManager()
+
     class Meta:
         ordering = ('created', 'billable',)
         verbose_name = 'Timesheet'
@@ -50,3 +54,11 @@ class Timesheet(models.Model):
     def full_name(self):
         """Returns the full name of the timesheet creator"""
         return '%s %s' % (self.first_name, self.last_name)
+
+    @property
+    def get_billable_amount(self):
+        """Calculates billable amount if instance is billable"""
+        if self.billable:
+            return self.hours * self.billable_rate
+        else:
+            raise Exception('Object is not billable')
