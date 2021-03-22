@@ -31,7 +31,7 @@ class Timesheet(models.Model):
     project = models.CharField(blank=False, max_length=100,)
     project_code = models.CharField(blank=False, max_length=10,)
     hours = models.DecimalField(
-        max_digits=3, decimal_places=2, blank=False, null=False,)
+        max_digits=5, decimal_places=2, blank=False, null=False,)
     billable = models.BooleanField(default=False)
     billable_rate = models.PositiveIntegerField(
         default=0, blank=False, null=False)

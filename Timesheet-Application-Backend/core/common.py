@@ -3,9 +3,8 @@
 # Python imports
 import csv
 import re
-from datetime import datetime, date
+from datetime import datetime
 from typing import Dict, Callable, Optional
-from decimal import Decimal
 
 # Django imports
 from django.conf import settings
@@ -62,7 +61,7 @@ def to_snake_case(camel_case_str: str) -> str:
     Transforms camelCase to snake_case
     """
 
-    return re.sub('([A-Z)([a-z0-9]+)', r'_\1\2', camel_case_str).lower()
+    return re.sub('([A-Z])([a-z0-9]+)', r'_\1\2', camel_case_str).lower()
 
 
 def deep_case_transform(data: Dict, to_case_func: Callable) -> Optional[Dict]:
@@ -98,8 +97,7 @@ def deep_case_transform(data: Dict, to_case_func: Callable) -> Optional[Dict]:
 
         if isinstance(value, dict):
             transformed_data[transformed_key] = deep_case_transform(
-                value, to_case_func
-            )
+                value, to_case_func)
 
     return transformed_data
 

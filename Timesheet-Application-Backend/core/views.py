@@ -1,21 +1,13 @@
 """Core views: Details on what data to show"""
 
 # Python imports
-from datetime import date
-
 # Django imports
-from django.utils import timezone
-from django.http import Http404
-from django.shortcuts import get_object_or_404
-from django.utils.functional import empty
 from django.utils.translation import gettext_lazy as _
-from django.shortcuts import render
 
 # 3rd party apps
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, generics
-from rest_framework.serializers import Serializer
+from rest_framework import status
 
 # Local app imports
 from . import serializers
@@ -40,14 +32,14 @@ class TimesheetList(APIView):
         As this will only be called once [unless someone decides to delete the database or all the entries in said database]
         the response will be faster (still in milliseconds) since this function will be skipped
         """
-        if len(timesheets) is 0:
+        if len(timesheets) == 0:
             import_to_database()
             timesheets = Timesheet.objects.all()
 
         serializer = serializers.TimesheetSerializer(timesheets, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    def post(self, request, format=None):
         serializer = serializers.TimesheetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
