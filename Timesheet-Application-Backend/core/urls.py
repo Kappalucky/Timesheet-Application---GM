@@ -10,11 +10,11 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 
 # Local app imports
-from . import views
+from .views import TimesheetList
 
 app_name = 'core'
 
 urlpatterns = [
-    path('timesheets/', views.TimesheetList.as_view(),
+    path('timesheets/', TimesheetList.as_view(),
          name='timesheets_list'),
 ]

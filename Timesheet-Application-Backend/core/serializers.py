@@ -3,13 +3,13 @@
 # Python imports
 # Django imports
 # 3rd party apps
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
 # Local app imports
 from .models import Timesheet
 
 
-class TimesheetSerializer(serializers.ModelSerializer):
+class TimesheetSerializer(ModelSerializer):
     """Serializes Timesheet data"""
 
     class Meta:

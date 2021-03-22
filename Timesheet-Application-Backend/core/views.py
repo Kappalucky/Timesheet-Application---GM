@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Local app imports
-from . import serializers
+from .serializers import TimesheetSerializer
 from .models import Timesheet
 from .renderers import CamelCaseRenderer
 from .parsers import SnakeCaseParser
@@ -20,7 +20,7 @@ from .common import import_to_database
 class TimesheetList(APIView):
     """List all timesheets or create a new timesheet"""
     queryset = Timesheet.objects.all()
-    serializer_class = serializers.TimesheetSerializer
+    serializer_class = TimesheetSerializer
     renderer_classes = [CamelCaseRenderer]
     parser_classes = [SnakeCaseParser]
 
@@ -36,11 +36,11 @@ class TimesheetList(APIView):
             import_to_database()
             timesheets = Timesheet.objects.all()
 
-        serializer = serializers.TimesheetSerializer(timesheets, many=True)
+        serializer = TimesheetSerializer(timesheets, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = serializers.TimesheetSerializer(data=request.data)
+        serializer = TimesheetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

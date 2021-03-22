@@ -3,14 +3,14 @@
 # Python imports
 # Django imports
 # 3rd party apps
-from rest_framework import renderers
+from rest_framework.renderers import BrowsableAPIRenderer
 
 # Local app imports
 from .renderers import BrowsableCamelCaseRenderer, CamelCaseRenderer
 from .parsers import SnakeCaseParser
 
 
-class ToCamelCase(renderers.BrowsableAPIRenderer):
+class ToCamelCase(BrowsableAPIRenderer):
     renderer_classes = (BrowsableCamelCaseRenderer, CamelCaseRenderer,)
 
 
