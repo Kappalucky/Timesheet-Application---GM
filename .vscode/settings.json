@@ -1,7 +1,10 @@
 {
   "cSpell.words": [
     "compat",
-    "timesheet"
+    "tbody",
+    "thead",
+    "timesheet",
+    "timesheets"
   ],
   "editor.formatOnSave": true,
   "eslint.alwaysShowStatus": true,

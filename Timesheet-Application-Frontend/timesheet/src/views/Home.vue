@@ -1,18 +1,24 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="home container mx-auto my-4 py-4">
+    <div class="section-header">
+      <page-header />
+    </div>
+    <div class="section-timesheet-list">
+      <timesheet-table />
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import TimesheetTable from '../components/TimesheetTable.vue';
+import PageHeader from '../components/PageHeader.vue';
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
-    HelloWorld,
+    TimesheetTable,
+    PageHeader,
   },
 };
 </script>
