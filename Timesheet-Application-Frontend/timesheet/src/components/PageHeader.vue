@@ -16,8 +16,19 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+
 export default {
   name: 'PageHeader',
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState({
+      billableAmount: (state) => state.billableAmount,
+      totalHours: (state) => state.totalHours,
+    }),
+  },
 };
 </script>
 

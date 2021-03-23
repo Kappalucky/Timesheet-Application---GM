@@ -20,20 +20,26 @@
                 </template>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr>
+                <tr v-for="timesheet in timesheets" :key="timesheet.index">
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-medium text-blue-500">Kartel Party</div>
+                    <div class="text-sm font-medium text-blue-500">{{ timesheet.project }}</div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-blue-500">Badman Entities</div>
+                    <div class="text-sm text-blue-500">{{ timesheet.client }}</div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-blue-500">34.02</div>
+                    <div class="text-sm text-blue-500">{{ timesheet.hours }}</div>
                   </td>
                   <!--If object is billable then billable hours is 100% else it is 0 -->
                   <td class="px-6 py-4 inline-flex whitespace-nowrap">
-                    <div class="text-sm text-gray-900">34.02</div>
-                    <p class="text-sm text-gray-400 ml-2 pr-2">(100%)</p>
+                    <template v-if="timesheet.billable">
+                      <div class="text-sm text-gray-900">{{ timesheet.hours }}</div>
+                      <p class="text-sm text-gray-400 ml-2 pr-2">(100%)</p>
+                    </template>
+                    <template v-else>
+                      <div class="text-sm text-gray-900">0.00</div>
+                      <p class="text-sm text-gray-400 ml-2 pr-2">(0%)</p>
+                    </template>
                   </td>
                   <!--If object is billable then billable amount is returned else it is $0 -->
                   <td class="px-6 py-4 whitespace-nowrap">
@@ -50,23 +56,27 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+
 export default {
   name: 'TimesheetTable',
   data() {
     return {
       headers: ['Name', 'Clients', 'Hours', 'Billable Hours', 'Billable Amount'],
-      timesheets: {
-        firstName: 'Greg',
-        lastName: 'Brown',
-        client: 'Badman Entities',
-        project: 'Kartel Party',
-        projectCode: 'BM004',
-        hours: '34.02',
-        billable: 'true',
-        billableRate: '80',
-        date: '2020-04-21',
-      },
     };
+  },
+  computed: {
+    ...mapState({
+      timesheets: (state) => state.timesheets,
+    }),
+  },
+  methods: {
+    ...mapActions({ getTimesheets: 'getTimesheets' }),
+  },
+  created() {
+    if (Object.keys(this.timesheets).length === 0) {
+      this.getTimesheets();
+    }
   },
 };
 </script>

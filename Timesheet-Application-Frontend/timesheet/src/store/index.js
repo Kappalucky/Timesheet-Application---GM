@@ -10,6 +10,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     timesheets: [],
+    billableAmount: '',
+    totalHours: '',
   },
   mutations: {
     ADD_TIMESHEETS(state, timesheet) {
@@ -43,6 +45,23 @@ export default new Vuex.Store({
           .catch((error) => {
             console.log(error);
             reject(error);
+          });
+      });
+    },
+    getTimesheets({ commit }) {
+      return new Promise((resolve, reject) => {
+        api
+          .get('/timesheets/')
+          .then((response) => {
+            console.log('getTimesheets:', response);
+            const timesheets = response.data;
+            commit('ADD_TIMESHEETS', timesheets);
+            resolve(response);
+          })
+          .catch((error) => {
+            const e = error;
+            console.log(error);
+            reject(e);
           });
       });
     },

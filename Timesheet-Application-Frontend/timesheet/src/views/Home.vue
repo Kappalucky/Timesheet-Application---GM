@@ -3,7 +3,8 @@
     <div class="section-header">
       <page-header />
     </div>
-    <div class="section-create-button">
+    <div class="section-create">
+      <!--Section button-->
       <div class="mt-5 flex lg:mt-0 lg:ml-4 justify-end">
         <span class="hidden sm:block">
           <button
@@ -26,6 +27,7 @@
           </button>
         </span>
       </div>
+      <!--Would normally move the modal and data to a separate component but it is unnecessary for an application with a singular page-->
       <div v-show="modal" class="fixed z-10 inset-0 overflow-y-auto">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -52,6 +54,7 @@
                           type="text"
                           name="first_name"
                           id="first_name"
+                          v-model="timesheet.firstName"
                           autocomplete="given-name"
                           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                         />
@@ -63,18 +66,19 @@
                           type="text"
                           name="last_name"
                           id="last_name"
+                          v-model="timesheet.lastName"
                           autocomplete="family-name"
                           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                         />
                       </div>
 
-                      <div class="col-span-6 sm:col-span-6">
+                      <div class="col-span-6">
                         <label for="client" class="block text-sm font-medium text-gray-700">Client</label>
                         <input
                           type="text"
                           name="client"
                           id="client"
-                          autocomplete="client"
+                          v-model="timesheet.client"
                           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                         />
                       </div>
@@ -85,49 +89,57 @@
                           type="text"
                           name="project"
                           id="project"
-                          autocomplete="project"
+                          v-model="timesheet.project"
                           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                         />
                       </div>
 
-                      <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                      <div class="col-span-6 sm:col-span-3">
                         <label for="project_code" class="block text-sm font-medium text-gray-700">Project Code</label>
                         <input
                           type="text"
                           name="project_code"
                           id="project_code"
+                          v-model="timesheet.projectCode"
                           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                         />
                       </div>
 
-                      <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                      <div class="col-span-6 sm:col-span-3">
                         <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
                         <input
                           type="date"
                           name="date"
                           id="date"
-                          autocomplete="date"
+                          v-model="timesheet.date"
                           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                         />
                       </div>
 
-                      <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                      <div class="col-span-6 sm:col-span-3">
                         <label for="hours" class="block text-sm font-medium text-gray-700">Hours</label>
                         <input
-                          type="text"
+                          type="number"
                           name="hours"
                           id="hours"
+                          step="any"
+                          min="0"
+                          max="999.99"
+                          v-model="timesheet.hours"
                           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                         />
                       </div>
 
-                      <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                      <div class="col-span-6 sm:col-span-3">
                         <label for="billable_rate" class="block text-sm font-medium text-gray-700">Billable Rate</label>
                         <input
-                          type="text"
+                          type="number"
                           name="billable_rate"
                           id="billable_rate"
-                          autocomplete="billable_rate"
+                          step="any"
+                          min="0"
+                          max="999.99"
+                          v-model="timesheet.billableRate"
                           class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm rounded-md"
                         />
                       </div>
@@ -143,6 +155,7 @@
                               id="billable"
                               name="billable"
                               type="checkbox"
+                              v-model="timesheet.billable"
                               class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                             />
                           </div>
@@ -184,7 +197,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import { mapActions, mapState } from 'vuex';
 import TimesheetTable from '../components/TimesheetTable.vue';
 import PageHeader from '../components/PageHeader.vue';
 
@@ -212,11 +225,28 @@ export default {
     };
   },
   methods: {
+    ...mapActions({ newTimesheet: 'newTimesheet' }),
     createTimesheet() {
-      console.log('testing');
+      console.log(this.timesheet);
+      this.toggleModal();
+      this.clearData();
+    },
+    clearData() {
+      this.timesheet = {
+        firstName: '',
+        lastName: '',
+        client: '',
+        project: '',
+        projectCode: '',
+        hours: '',
+        billable: '',
+        billableRate: '',
+        date: '',
+      };
     },
     toggleModal() {
       this.modal = !this.modal;
+      this.clearData();
     },
   },
 };
