@@ -228,8 +228,7 @@ export default {
     ...mapActions({ newTimesheet: 'newTimesheet' }),
     createTimesheet() {
       console.log(this.timesheet);
-      this.toggleModal();
-      this.clearData();
+      this.newTimesheet(this.timesheet).then(this.toggleModal(), this.clearData());
     },
     clearData() {
       this.timesheet = {

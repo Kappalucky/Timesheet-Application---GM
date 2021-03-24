@@ -15,5 +15,5 @@ class TimesheetSerializer(ModelSerializer):
     class Meta:
         model = Timesheet
         fields = ('id', 'first_name', 'last_name', 'client', 'project',
-                  'project_code', 'hours', 'billable', 'billable_rate', 'date',)
-        read_only_fields = ('created', 'last_updated',)
+                  'project_code', 'hours', 'billable', 'billable_rate', 'date', 'billable_amount')
+        read_only_fields = ('created', 'last_updated', 'billable_amount')

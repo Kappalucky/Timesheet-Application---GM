@@ -14,10 +14,16 @@ export default new Vuex.Store({
     totalHours: '',
   },
   mutations: {
-    ADD_TIMESHEETS(state, timesheet) {
-      state.timesheets = { ...timesheet };
+    ADD_TIMESHEETS(state, timesheets) {
+      state.timesheets = timesheets;
     },
-    NEW_VEHICLE(state, timesheet) {
+    ADD_TOTAL_HOURS(state, totalHours) {
+      state.totalHours = totalHours;
+    },
+    ADD_TOTAL_BILLABLE_AMOUNT(state, billableAmount) {
+      state.billableAmount = billableAmount;
+    },
+    NEW_TIMESHEET(state, timesheet) {
       state.timesheets.push(timesheet);
     },
   },
@@ -48,7 +54,7 @@ export default new Vuex.Store({
           });
       });
     },
-    getTimesheets({ commit }) {
+    getTimesheets({ commit, dispatch }) {
       return new Promise((resolve, reject) => {
         api
           .get('/timesheets/')
@@ -56,6 +62,42 @@ export default new Vuex.Store({
             console.log('getTimesheets:', response);
             const timesheets = response.data;
             commit('ADD_TIMESHEETS', timesheets);
+            dispatch('getTotalHours');
+            dispatch('getTotalBillableAmount');
+            resolve(response);
+          })
+          .catch((error) => {
+            const e = error;
+            console.log(error);
+            reject(e);
+          });
+      });
+    },
+    getTotalHours({ commit }) {
+      return new Promise((resolve, reject) => {
+        api
+          .get('/timesheets/total_hours/')
+          .then((response) => {
+            console.log('getTotalHours:', response);
+            const { totalHours } = response.data;
+            commit('ADD_TOTAL_HOURS', totalHours);
+            resolve(response);
+          })
+          .catch((error) => {
+            const e = error;
+            console.log(error);
+            reject(e);
+          });
+      });
+    },
+    getTotalBillableAmount({ commit }) {
+      return new Promise((resolve, reject) => {
+        api
+          .get('/timesheets/total_billable_amount/')
+          .then((response) => {
+            console.log('getTotalBillableAmount:', response);
+            const billableAmount = response.data;
+            commit('ADD_TOTAL_BILLABLE_AMOUNT', billableAmount);
             resolve(response);
           })
           .catch((error) => {

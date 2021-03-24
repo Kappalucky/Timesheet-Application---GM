@@ -19,12 +19,14 @@ from .common import import_to_database
 
 class TimesheetList(APIView):
     """List all timesheets or create a new timesheet"""
-    queryset = Timesheet.objects.all()
+
     serializer_class = TimesheetSerializer
     renderer_classes = [CamelCaseRenderer]
     parser_classes = [SnakeCaseParser]
 
     def get(self, request, format=None):
+        """Returns timesheet queryset"""
+
         timesheets = Timesheet.objects.all()
 
         """
@@ -32,6 +34,7 @@ class TimesheetList(APIView):
         As this will only be called once [unless someone decides to delete the database or all the entries in said database]
         the response will be faster (still in milliseconds) since this function will be skipped
         """
+
         if len(timesheets) == 0:
             import_to_database()
             timesheets = Timesheet.objects.all()
@@ -40,8 +43,41 @@ class TimesheetList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """Create timesheet"""
+
         serializer = TimesheetSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TimesheetTotalHours(APIView):
+    """HTTP get request for total hours of timesheet query"""
+
+    renderer_classes = [CamelCaseRenderer]
+
+    def get(self, request, format=None):
+        """Returns total amount of hours across timesheets"""
+
+        total_hours = Timesheet.objects.get_total_hours()
+
+        if total_hours:
+            return Response(total_hours, status=status.HTTP_200_OK)
+        else:
+            return Response('Error: Unable to get total hours', status=status.HTTP_400_BAD_REQUEST)
+
+
+class TimesheetTotalBillableAmount(APIView):
+    """HTTP get request for total billable amount of timesheet query"""
+
+    def get(self, request, format=None):
+        """Returns total billable amount across billable timesheets"""
+
+        total_billable_amount = Timesheet.objects.get_total_billable_amount()
+
+        if total_billable_amount:
+            return Response(total_billable_amount, status=status.HTTP_200_OK)
+        else:
+            return Response('Error: Unable to get total billable amount', status=status.HTTP_400_BAD_REQUEST)

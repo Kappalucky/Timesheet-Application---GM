@@ -30,7 +30,6 @@
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm text-blue-500">{{ timesheet.hours }}</div>
                   </td>
-                  <!--If object is billable then billable hours is 100% else it is 0 -->
                   <td class="px-6 py-4 inline-flex whitespace-nowrap">
                     <template v-if="timesheet.billable">
                       <div class="text-sm text-gray-900">{{ timesheet.hours }}</div>
@@ -41,9 +40,14 @@
                       <p class="text-sm text-gray-400 ml-2 pr-2">(0%)</p>
                     </template>
                   </td>
-                  <!--If object is billable then billable amount is returned else it is $0 -->
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-bold text-gray-900">$538.00</div>
+                    <div class="text-sm font-bold text-gray-900">
+                      {{
+                        new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
+                          timesheet.billableAmount,
+                        )
+                      }}
+                    </div>
                   </td>
                 </tr>
               </tbody>
