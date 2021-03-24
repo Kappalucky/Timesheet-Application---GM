@@ -1,4 +1,4 @@
-"""Core serializers: Functions to change json to python readable format"""
+"""Core Serializers: Functions to change json to python readable format"""
 
 # Python imports
 # Django imports

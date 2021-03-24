@@ -5,7 +5,6 @@ from decimal import *
 
 # Django imports
 from django.db import models
-from django.db.models import Sum
 
 # 3rd party apps
 # Local app imports
@@ -62,6 +61,6 @@ class Timesheet(models.Model):
         """Calculates billable amount if instance is billable, else return 0"""
 
         if self.billable:
-            return self.hours * self.billable_rate
+            return (Decimal(self.hours) * Decimal(self.billable_rate))
         else:
             return Decimal(0.00)

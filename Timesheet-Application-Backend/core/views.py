@@ -3,12 +3,10 @@
 # Python imports
 # Django imports
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
 
 # 3rd party apps
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import pagination
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 

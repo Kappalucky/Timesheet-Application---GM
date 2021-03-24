@@ -1,4 +1,4 @@
-"""Core renderers: Changes the formatting of variables"""
+"""Core Renderers: Changes the formatting of variables"""
 
 # Python imports
 # Django imports

@@ -1,14 +1,10 @@
-"""Core urls: API urls"""
+"""Core Urls: API urls"""
 
 # Python imports
 # Django imports
 from django.urls import path
 
 # 3rd party apps
-from rest_framework import urlpatterns
-from rest_framework.routers import DefaultRouter
-from rest_framework.urlpatterns import format_suffix_patterns
-
 # Local app imports
 from .views import TimesheetList, TimesheetTotalHours, TimesheetTotalBillableAmount
 
