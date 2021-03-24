@@ -27,7 +27,7 @@
           </button>
         </span>
       </div>
-      <!--Would normally move the modal and data to a separate component but it is unnecessary for an application with a singular page-->
+      <!--Modal-->
       <div v-show="modal" class="fixed z-10 inset-0 overflow-y-auto">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -197,7 +197,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import TimesheetTable from '../components/TimesheetTable.vue';
 import PageHeader from '../components/PageHeader.vue';
 
@@ -227,7 +227,6 @@ export default {
   methods: {
     ...mapActions({ newTimesheet: 'newTimesheet' }),
     createTimesheet() {
-      console.log(this.timesheet);
       this.newTimesheet(this.timesheet).then(this.toggleModal(), this.clearData());
     },
     clearData() {

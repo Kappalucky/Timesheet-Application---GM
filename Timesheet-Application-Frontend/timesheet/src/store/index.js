@@ -10,12 +10,25 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     timesheets: [],
+    count: '',
+    previous: '',
+    current: '',
+    next: '',
     billableAmount: '',
     totalHours: '',
   },
   mutations: {
     ADD_TIMESHEETS(state, timesheets) {
       state.timesheets = timesheets;
+    },
+    ADD_COUNT(state, count) {
+      state.count = count;
+    },
+    ADD_NEXT(state, next) {
+      state.next = next;
+    },
+    ADD_PREVIOUS(state, previous) {
+      state.previous = previous;
     },
     ADD_TOTAL_HOURS(state, totalHours) {
       state.totalHours = totalHours;
@@ -57,11 +70,17 @@ export default new Vuex.Store({
     getTimesheets({ commit, dispatch }) {
       return new Promise((resolve, reject) => {
         api
-          .get('/timesheets/')
+          .get('/timesheets/?limit=10&page=1')
           .then((response) => {
             console.log('getTimesheets:', response);
-            const timesheets = response.data;
+            const timesheets = response.data.results;
+            const { count } = response.data;
+            const { next } = response.data;
+            const { previous } = response.data;
             commit('ADD_TIMESHEETS', timesheets);
+            commit('ADD_COUNT', count);
+            commit('ADD_NEXT', next);
+            commit('ADD_PREVIOUS', previous);
             dispatch('getTotalHours');
             dispatch('getTotalBillableAmount');
             resolve(response);
