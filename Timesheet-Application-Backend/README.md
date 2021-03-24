@@ -23,7 +23,7 @@ virtualenv venv
 ```
 source venv/bin/activate
 ```
-4.  Change directory `cd` to repository folder then install requirements file from repository
+4.  Install requirements file from repository
 ```
 pip3 install -r requirements.txt
 ```

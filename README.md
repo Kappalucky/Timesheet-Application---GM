@@ -28,7 +28,7 @@ All instructions for the frontend and backend are in their own readme files with
 1.  Clone repository
 #### Within Timesheet-Application-GM/Timesheet-Application-Backend
 
-2.  Install prerequisites if you have not already
+2.  Install backend prerequisites if you have not already
 3.  Create a Virtualenv environment
 ```
 virtualenv venv
@@ -37,7 +37,7 @@ virtualenv venv
 ```
 source venv/bin/activate
 ```
-5.  Change directory `cd` to repository folder then install requirements file from repository
+5.  Install requirements file from repository
 ```
 pip3 install -r requirements.txt
 ```
@@ -57,11 +57,13 @@ python3 manage.py runserver
 
 #### Within Timesheet-Application-GM/Timesheet-Application-Frontend
 
-9.  call npm install to begin installation of all package requirements
+9.   Install frontend prerequisites if you have not already
+10.  Navigate to timesheet folder (`cd`)
+11.  call npm install to begin installation of all package requirements
 ```
 npm install
 ```
-10.  call npm run serve to start development server
+12.  call npm run serve to start development server
 ```
 npm run serve
 ```
