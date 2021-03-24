@@ -11,7 +11,7 @@ This folder contains the Vue.js built frontend for the Timesheet application
 
 #### Installation
 
-1.  Install frontend prerequisites if you have not already
+1.  Install prerequisites if you have not already
 2.  Navigate to timesheet folder (`cd`)
 3.  call npm install to begin installation of all package requirements
 

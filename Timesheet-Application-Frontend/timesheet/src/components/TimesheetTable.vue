@@ -55,35 +55,36 @@
             <!--Pagination-->
             <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
               <div class="flex-1 flex justify-between sm:hidden">
-                <a
-                  href="#"
+                <button
+                  @click="previousPage"
+                  :disabled="this.pagination.page === 1"
                   class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500"
                 >
                   Previous
-                </a>
-                <a
-                  href="#"
+                </button>
+                <button
+                  @click="nextPage"
+                  :disabled="this.pagination.page === this.pagination.totalPages"
                   class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500"
                 >
                   Next
-                </a>
+                </button>
               </div>
               <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
                   <p class="text-sm text-gray-700">
                     Showing
-                    <span class="font-medium">1</span>
-                    to
-                    <span class="font-medium">10</span>
+                    <span class="font-medium">{{ this.timesheetCount }}</span>
                     of
-                    <span class="font-medium">97</span>
+                    <span class="font-medium">{{ this.pagination.count }}</span>
                     results
                   </p>
                 </div>
                 <div>
                   <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                    <a
-                      href="#"
+                    <button
+                      @click="previousPage"
+                      :disabled="this.pagination.page === 1"
                       class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                     >
                       <span class="sr-only">Previous</span>
@@ -101,50 +102,19 @@
                           clip-rule="evenodd"
                         />
                       </svg>
-                    </a>
-                    <a
-                      href="#"
-                      class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                      1
-                    </a>
-                    <a
-                      href="#"
-                      class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                      2
-                    </a>
-                    <a
-                      href="#"
-                      class="hidden md:inline-flex relative items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                      3
-                    </a>
-                    <span
-                      class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
-                    >
-                      ...
-                    </span>
-                    <a
-                      href="#"
-                      class="hidden md:inline-flex relative items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                      8
-                    </a>
-                    <a
-                      href="#"
-                      class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                      9
-                    </a>
-                    <a
-                      href="#"
-                      class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                      10
-                    </a>
-                    <a
-                      href="#"
+                    </button>
+                    <template v-for="(n, index) in this.pagination.totalPages">
+                      <button
+                        :key="index"
+                        @click="getPage(n)"
+                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        {{ n }}
+                      </button>
+                    </template>
+                    <button
+                      @click="nextPage"
+                      :disabled="this.pagination.page === this.pagination.totalPages"
                       class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                     >
                       <span class="sr-only">Next</span>
@@ -162,7 +132,7 @@
                           clip-rule="evenodd"
                         />
                       </svg>
-                    </a>
+                    </button>
                   </nav>
                 </div>
               </div>
@@ -175,27 +145,50 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'TimesheetTable',
   data() {
     return {
       headers: ['Name', 'Clients', 'Hours', 'Billable Hours', 'Billable Amount'],
+      limit: 25,
     };
   },
   computed: {
     ...mapState({
       timesheets: (state) => state.timesheets,
+      pagination: (state) => state.pagination,
     }),
-  },
-  methods: {
-    ...mapActions({ getTimesheets: 'getTimesheets' }),
+    ...mapGetters({
+      timesheetCount: 'timesheetCount',
+    }),
   },
   created() {
     if (Object.keys(this.timesheets).length === 0) {
-      this.getTimesheets();
+      this.getTimesheets({ page: 1, limit: this.limit });
     }
+  },
+  methods: {
+    ...mapActions({ getTimesheets: 'getTimesheets' }),
+    nextPage() {
+      this.getTimesheets({
+        page: this.pagination.page + 1,
+        limit: this.limit,
+      });
+    },
+    getPage(index) {
+      this.getTimesheets({
+        page: index,
+        limit: this.limit,
+      });
+    },
+    previousPage() {
+      this.getTimesheets({
+        page: this.pagination.page - 1,
+        limit: this.limit,
+      });
+    },
   },
 };
 </script>

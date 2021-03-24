@@ -217,7 +217,7 @@ export default {
         project: '',
         projectCode: '',
         hours: '',
-        billable: '',
+        billable: false,
         billableRate: '',
         date: '',
       },
@@ -237,7 +237,7 @@ export default {
         project: '',
         projectCode: '',
         hours: '',
-        billable: '',
+        billable: false,
         billableRate: '',
         date: '',
       };

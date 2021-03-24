@@ -1,5 +1,5 @@
 <template>
-  <div class="relative py-3 max-w-xl mx-auto">
+  <div class="relative py-3 mx-auto">
     <div class="flex lg:items-center justify-between">
       <div class="flex-1 min-w-0">
         <h3 class="text-sm font-medium text-gray-500 sm:text-sm sm:truncate text-left">Hours Tracked</h3>

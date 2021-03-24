@@ -1,34 +1,44 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import api from '../services/API';
-
-console.log(api);
+import api from '../services/api';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
+  modules: {},
   state: {
     timesheets: [],
+    pagination: {
+      previous: '',
+      next: '',
+      page: 1,
+      limit: 25,
+      totalPages: 0,
+    },
     count: '',
-    previous: '',
-    current: '',
-    next: '',
     billableAmount: '',
     totalHours: '',
+    errors: {},
   },
   mutations: {
     ADD_TIMESHEETS(state, timesheets) {
       state.timesheets = timesheets;
     },
     ADD_COUNT(state, count) {
-      state.count = count;
+      state.pagination.count = count;
+    },
+    ADD_TOTAL_PAGES(state, totalPages) {
+      state.pagination.totalPages = totalPages;
+    },
+    SET_PAGINATION(state, pagination) {
+      state.pagination = pagination;
     },
     ADD_NEXT(state, next) {
-      state.next = next;
+      state.pagination.next = next;
     },
     ADD_PREVIOUS(state, previous) {
-      state.previous = previous;
+      state.pagination.previous = previous;
     },
     ADD_TOTAL_HOURS(state, totalHours) {
       state.totalHours = totalHours;
@@ -39,11 +49,16 @@ export default new Vuex.Store({
     NEW_TIMESHEET(state, timesheet) {
       state.timesheets.push(timesheet);
     },
+    ADD_ERROR(state, payload) {
+      state.errors = payload;
+    },
+    CLEAR_ERROR(state) {
+      state.errors = {};
+    },
   },
   actions: {
     newTimesheet({ dispatch, commit }, params) {
       return new Promise((resolve, reject) => {
-        console.log(params);
         api
           .post('/timesheets/', {
             firstName: params.firstName,
@@ -57,37 +72,57 @@ export default new Vuex.Store({
             date: params.date,
           })
           .then((response) => {
-            console.log('newTimesheet:', response);
-            dispatch('getTimesheets');
+            dispatch('getTimesheets', { page: 1, limit: 10 });
             resolve(response);
           })
           .catch((error) => {
-            console.log(error);
-            reject(error);
+            const e = error.message;
+            commit('ADD_ERROR', e);
+            reject(e);
           });
       });
     },
-    getTimesheets({ commit, dispatch }) {
+    getTimesheets({ commit, dispatch }, { page, limit }) {
       return new Promise((resolve, reject) => {
+        let endpoint = 'timesheets';
+
+        // Check if 'page' is the only variable
+        if (page) {
+          endpoint = `${endpoint}?page=${page}`;
+        }
+
+        // Check if 'limit' is also included. Append to end of page endpoint
+        if (limit) {
+          endpoint = `${endpoint}&limit=${limit}`;
+        }
+
         api
-          .get('/timesheets/?limit=10&page=1')
+          .get(endpoint)
           .then((response) => {
-            console.log('getTimesheets:', response);
-            const timesheets = response.data.results;
-            const { count } = response.data;
-            const { next } = response.data;
-            const { previous } = response.data;
-            commit('ADD_TIMESHEETS', timesheets);
-            commit('ADD_COUNT', count);
-            commit('ADD_NEXT', next);
-            commit('ADD_PREVIOUS', previous);
+            if (response.data.results) {
+              const timesheets = response.data.results;
+              commit('SET_PAGINATION', {
+                previous: response.data.links.previous,
+                next: response.data.links.next,
+                totalPages: response.data.totalPages,
+                count: response.data.count,
+                limit,
+                page,
+              });
+              commit('ADD_TIMESHEETS', timesheets);
+            } else {
+              const timesheets = response.data;
+              commit('ADD_TIMESHEETS', timesheets);
+            }
+
+            commit('CLEAR_ERROR', null);
             dispatch('getTotalHours');
             dispatch('getTotalBillableAmount');
             resolve(response);
           })
           .catch((error) => {
-            const e = error;
-            console.log(error);
+            const e = error.message;
+            commit('ADD_ERROR', e);
             reject(e);
           });
       });
@@ -97,14 +132,13 @@ export default new Vuex.Store({
         api
           .get('/timesheets/total_hours/')
           .then((response) => {
-            console.log('getTotalHours:', response);
             const { totalHours } = response.data;
             commit('ADD_TOTAL_HOURS', totalHours);
             resolve(response);
           })
           .catch((error) => {
-            const e = error;
-            console.log(error);
+            const e = error.message;
+            commit('ADD_ERROR', e);
             reject(e);
           });
       });
@@ -114,18 +148,21 @@ export default new Vuex.Store({
         api
           .get('/timesheets/total_billable_amount/')
           .then((response) => {
-            console.log('getTotalBillableAmount:', response);
             const billableAmount = response.data;
             commit('ADD_TOTAL_BILLABLE_AMOUNT', billableAmount);
             resolve(response);
           })
           .catch((error) => {
-            const e = error;
-            console.log(error);
+            const e = error.message;
+            commit('ADD_ERROR', e);
             reject(e);
           });
       });
     },
   },
-  modules: {},
+  getters: {
+    timesheetCount: (state) => state.timesheets.length,
+  },
 });
+
+export default store;
