@@ -24,7 +24,7 @@ Frontend:
 #### Installation
 
 
-All instructions for the frontend and backend are in their own readme files within their own file structure...but if you're feeling lazy, I also included the instructions for both below. The instructions are based on a MacOs/Unix/Linux environment. I'm sorry windows developers 😣
+All instructions for the frontend and backend are in their own readme files within their own file structure...but if you're feeling lazy, I also included the instructions for both below. The instructions are based on a MacOs/Unix/Linux environment. I'm sorry Windows developers 😣
 
 1.  Clone repository
 #### Within Timesheet-Application-GM/Timesheet-Application-Backend
