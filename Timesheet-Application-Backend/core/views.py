@@ -1,4 +1,4 @@
-"""Core views: Details on what data to show"""
+"""Core Views: Details on what data to show"""
 
 # Python imports
 # Django imports
@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 # 3rd party apps
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 
 # Local app imports
@@ -15,12 +16,18 @@ from .models import Timesheet
 from .renderers import CamelCaseRenderer
 from .parsers import SnakeCaseParser
 from .common import import_to_database
+from .pagination import PaginationHandlerMixin
 
 
-class TimesheetList(APIView):
+class BasicPagination(PageNumberPagination):
+    page_size_query_param = 'limit'
+
+
+class TimesheetList(APIView, PaginationHandlerMixin):
     """List all timesheets or create a new timesheet"""
 
     serializer_class = TimesheetSerializer
+    pagination_class = BasicPagination
     renderer_classes = [CamelCaseRenderer]
     parser_classes = [SnakeCaseParser]
 
@@ -39,13 +46,20 @@ class TimesheetList(APIView):
             import_to_database()
             timesheets = Timesheet.objects.all()
 
-        serializer = TimesheetSerializer(timesheets, many=True)
-        return Response(serializer.data)
+        page = self.paginate_queryset(timesheets)
+
+        if page is not None:
+            serializer = self.get_paginated_response(self.serializer_class(page,
+                                                                           many=True).data)
+        else:
+            serializer = self.serializer_class(timesheets, many=True)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def post(self, request, format=None):
         """Create timesheet"""
 
-        serializer = TimesheetSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
