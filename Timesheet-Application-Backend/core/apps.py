@@ -1,4 +1,4 @@
-"""Core apps: Django app configuration"""
+"""Core Apps: Django app configuration"""
 
 # Python imports
 # Django imports

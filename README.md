@@ -10,24 +10,63 @@ Welcome to the **Timesheet Application** codebase. I ([@kappalucky](https://gith
 
 ## Getting Started
 
-This is the general starting point as of right now. More detailed documentation to be written soon.
-
 #### Prerequisites
 
+Backend:
 - [Python 3.0+](https://www.python.org/)
 - [Pip3](https://pypi.org/project/pip/)
 - [Virtualenv](https://virtualenv.pypa.io/en/latest/)
+
+Frontend:
 - [Node](https://nodejs.org/en/)
 - [Vue.js](https://vuejs.org/)
 
 #### Installation
 
-1.  Install prerequisites
-2.  Clone repository
-3.  Create a Virtualenv environment and activate
-4.  Change directory `cd` to repository folder then install requirements file from repository `pip3 install requirements.txt`
-5.  (./manage.py) Makemigrations and migrate to Django provided SQLite database or Postgres if you have the time
-6.  Create Superuser for testing on local machine
+All instructions for the frontend and backend are in their own readme files within their own file structure...but if you're feeling lazy, I also included the instructions for both below
+
+1.  Clone repository
+#### Within Timesheet-Application-GM/Timesheet-Application-Backend
+
+2.  Install backend prerequisites if you have not already
+3.  Create a Virtualenv environment
+```
+virtualenv venv
+```
+4.  Activate environment
+```
+source venv/bin/activate
+```
+5.  Install requirements file from repository
+```
+pip3 install -r requirements.txt
+```
+6.  (./manage.py or Python3 manage.py) Makemigrations and migrate to Django provided SQLite database or Postgres if you have the time
+```
+python3 manage.py makemigrations
+python3 manage.py migrate
+```
+7.  Create Superuser for testing on local machine (No need to if you're simply calling the api and don't care to see all the data or change it)
+```
+python3 manage.py createsuperuser
+```
+8.  Run the development server before running the frontends server. It is best to use localhost:8000. If not you will have to change the url within services/api.js of the front end main folder
+```
+python3 manage.py runserver
+```
+
+#### Within Timesheet-Application-GM/Timesheet-Application-Frontend
+
+9.   Install frontend prerequisites if you have not already
+10.  Navigate to timesheet folder (`cd`)
+11.  call npm install to begin installation of all package requirements
+```
+npm install
+```
+12.  call npm run serve to start development server
+```
+npm run serve
+```
 
 ## License
 

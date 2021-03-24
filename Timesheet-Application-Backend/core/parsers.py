@@ -1,4 +1,4 @@
-"""Core parsers: Changes the formatting of variables"""
+"""Core Parsers: Changes the formatting of variables"""
 
 # Python imports
 # Django imports

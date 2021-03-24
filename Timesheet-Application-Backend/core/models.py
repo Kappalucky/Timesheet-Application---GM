@@ -12,6 +12,7 @@ from .managers import TimesheetManager
 
 
 class Timesheet(models.Model):
+
     """
     Timesheet model
       * First Name
@@ -33,8 +34,8 @@ class Timesheet(models.Model):
     hours = models.DecimalField(
         max_digits=5, decimal_places=2, blank=False, null=False,)
     billable = models.BooleanField(default=False)
-    billable_rate = models.PositiveIntegerField(
-        default=0, blank=False, null=False)
+    billable_rate = models.DecimalField(
+        max_digits=6, decimal_places=2, blank=False, null=False,)
     date = models.DateField(blank=False, null=False)
     created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(null=True, blank=True,)
@@ -56,9 +57,10 @@ class Timesheet(models.Model):
         return '%s %s' % (self.first_name, self.last_name)
 
     @property
-    def get_billable_amount(self):
-        """Calculates billable amount if instance is billable"""
+    def billable_amount(self):
+        """Calculates billable amount if instance is billable, else return 0"""
+
         if self.billable:
-            return self.hours * self.billable_rate
+            return (Decimal(self.hours) * Decimal(self.billable_rate))
         else:
-            raise Exception('Object is not billable')
+            return Decimal(0.00)
