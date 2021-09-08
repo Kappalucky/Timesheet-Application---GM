@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://localhost:8000/';
+const url = 'https://timesheet-324823.ue.r.appspot.com/';
 
 const api = axios.create({
   baseURL: url,

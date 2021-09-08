@@ -13,6 +13,8 @@
 .dump
 .code-workspace
 venv/
+.venv
+app.yaml
 .DS_Store
 .vscode/
 
